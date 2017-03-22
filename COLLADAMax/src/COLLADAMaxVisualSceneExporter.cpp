@@ -379,11 +379,10 @@ namespace COLLADAMax
 			// Translation
 			Control * translationController = ( transformationController ) ? transformationController->GetPositionController() : 0 ;
 
-			if (!AnimationExporter::isAnimated(translationController)) {
-				if (!affineParts.t.Equals(Point3::Origin, TOLERANCE))
-					colladaNode.addTranslate(affineParts.t.x, affineParts.t.y, affineParts.t.z);
-			}
-			else {
+			if (!affineParts.t.Equals(Point3::Origin, TOLERANCE))
+				colladaNode.addTranslate(affineParts.t.x, affineParts.t.y, affineParts.t.z);
+
+			if (AnimationExporter::isAnimated(translationController)) {
 				// Animated
 
 				ILayerControl* ilc = GetILayerControlInterface(translationController);
@@ -391,7 +390,7 @@ namespace COLLADAMax
 				{
 #if defined(MAX_RELEASE_R17) && (MAX_RELEASE >= MAX_RELEASE_R17)
 
-					for (int i = 0; i < ilc->GetLayerCount(); ++i) {
+					for (int i = 1; i < ilc->GetLayerCount(); ++i) {
 						// Export layers as named animations
 						NativeString layerName(i == 0 ? L"" : ilc->GetLayerName(i).data()); // Leave the base layer without a name
 
@@ -421,31 +420,27 @@ namespace COLLADAMax
 
 			Control * rotationController = (transformationController) ? transformationController->GetRotationController() : 0;
 
-			if ( !AnimationExporter::isAnimated(rotationController) )
+			// Save as axis-angle rotation.
+			Matrix3 rotationMatrix;
+			affineParts.q.MakeMatrix ( rotationMatrix );
+
+			AngAxis angleAxisRotation = AngAxis ( rotationMatrix );
+
+			if ( !angleAxisRotation.axis.Equals ( Point3::Origin ) && !COLLADASW::MathUtils::equalsZero ( angleAxisRotation.angle ) )
 			{
-				// Save as axis-angle rotation.
-				Matrix3 rotationMatrix;
-				affineParts.q.MakeMatrix ( rotationMatrix );
-
-				AngAxis angleAxisRotation = AngAxis ( rotationMatrix );
-
-				if ( !angleAxisRotation.axis.Equals ( Point3::Origin ) && !COLLADASW::MathUtils::equalsZero ( angleAxisRotation.angle ) )
-				{
-					Point3 & rotationAxis = angleAxisRotation.axis;
-					colladaNode.addRotate ( rotationAxis.x, rotationAxis.y, rotationAxis.z, -COLLADASW::MathUtils::radToDeg ( angleAxisRotation.angle ) );
-				}
+				Point3 & rotationAxis = angleAxisRotation.axis;
+				colladaNode.addRotate ( rotationAxis.x, rotationAxis.y, rotationAxis.z, -COLLADASW::MathUtils::radToDeg ( angleAxisRotation.angle ) );
 			}
 
-			else
+			if (AnimationExporter::isAnimated(rotationController))
 			{
 				// Animated
 
 				ILayerControl* ilc = GetILayerControlInterface(rotationController);
-				if (options.getExportLayersAsClips() && ilc != NULL && ilc->GetLayerCount() > 1)
-				{
+				if (options.getExportLayersAsClips() && ilc != NULL && ilc->GetLayerCount() > 1) {
 #if defined(MAX_RELEASE_R17) && (MAX_RELEASE >= MAX_RELEASE_R17)
 
-					for (int i = 0; i < ilc->GetLayerCount(); ++i) {
+					for (int i = 1; i < ilc->GetLayerCount(); ++i) {
 						// Export layers as named animations
 						NativeString layerName(i == 0 ? L"" : ilc->GetLayerName(i).data()); // Leave the base layer without a name
 

@@ -69,6 +69,13 @@
 #include <imtl.h>      // for UVGen
 #include <custcont.h>  //for dialog
 
+#include <maxscript/maxscript.h>
+#include <maxscript/util/listener.h>
+
+#ifdef END
+#undef END
+#endif
+
 #include <IDxMaterial.h>  // for IDxMaterial
 
 #include "MorphR3.h"		//for morph controller MorphR3 

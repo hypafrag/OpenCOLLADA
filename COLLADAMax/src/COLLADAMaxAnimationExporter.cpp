@@ -29,7 +29,6 @@
 #include <control.h>
 #include <units.h>
 
-
 namespace COLLADAMax
 {
 
@@ -1213,9 +1212,61 @@ namespace COLLADAMax
 
 		if ( isSampling )
 		{
+			the_listener->edit_stream->wprintf(L"sampling %s\n", COLLADABU::StringUtils::utf8String2WideString(animation.getSid()).c_str());
+
 			int ticksPerFrame = GetTicksPerFrame();
 			TimeValue startTime = mDocumentExporter->getOptions().getAnimationStart();
 			TimeValue endTime = mDocumentExporter->getOptions().getAnimationEnd() + 1;
+
+			IKeyControl *kI = GetKeyControlInterface ( controller );
+			if (kI) {
+				IKey *key = nullptr;
+                switch ( controller->ClassID().PartA() ) {
+                case LININTERP_FLOAT_CLASS_ID:
+                    key = new ILinFloatKey();
+                    break;
+                case LININTERP_POSITION_CLASS_ID:
+                    key = new ILinPoint3Key();
+                    break;
+                case LININTERP_ROTATION_CLASS_ID:
+                    key = new ILinRotKey();
+                    break;
+				case LININTERP_SCALE_CLASS_ID:
+                    key = new ILinScaleKey();
+					break;
+                case HYBRIDINTERP_FLOAT_CLASS_ID:
+                    key = new IBezFloatKey();
+                    break;
+				case HYBRIDINTERP_POINT3_CLASS_ID:
+				case HYBRIDINTERP_POSITION_CLASS_ID: 
+				case HYBRIDINTERP_COLOR_CLASS_ID:
+                    key = new IBezPoint3Key();
+					break;
+				case HYBRIDINTERP_POINT4_CLASS_ID:
+				case HYBRIDINTERP_FRGBA_CLASS_ID:
+                    key = new IBezPoint4Key();
+					break;
+				case HYBRIDINTERP_ROTATION_CLASS_ID:
+                    key = new IBezQuatKey();
+					break;
+				case HYBRIDINTERP_SCALE_CLASS_ID:
+                    key = new IBezScaleKey();
+					break;
+				case TCBINTERP_FLOAT_CLASS_ID:
+                    key = new ITCBFloatKey();
+					break;
+                }
+				if (key) {
+					kI->GetKey(0, key);
+					startTime = key->time;
+					kI->GetKey(kI->GetNumKeys() - 1, key);
+					endTime = key->time + 1;
+					delete key;
+				}
+			}
+
+			the_listener->edit_stream->wprintf(L"s - %d e - %d tps - %d\n", startTime, endTime, ticksPerFrame);
+			the_listener->edit_stream->flush();
 
 			if ( endTime > startTime )
 			{
@@ -1275,7 +1326,6 @@ namespace COLLADAMax
 
         source.finish();
     }
-
 
     //---------------------------------------------------------------
     void AnimationExporter::exportOutputSource ( const Animation & animation, const String & baseId, IKeyControl* keyInterface, OutputValueFunctionPtr outputValueFunction )

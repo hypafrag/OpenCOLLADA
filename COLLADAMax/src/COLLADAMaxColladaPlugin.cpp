@@ -8,7 +8,7 @@ namespace COLLADAMax
 
 	const TCHAR* COLLADAPlugin::EXTENSIONNAME = __T("dae");
 	const TCHAR* COLLADAPlugin::LONGDESCRIPTION = __T("New COLLADA Document");
-	const TCHAR* COLLADAPlugin::SHORTDESCRIPTION = __T("OpenCOLLADA");
+	const TCHAR* COLLADAPlugin::SHORTDESCRIPTION = __T("OpenCOLLADA (patched by Escobar)");
 	const TCHAR* COLLADAPlugin::AUTHORNAME = __T("NetAllied Systems GmbH");
 	const TCHAR* COLLADAPlugin::COPYRIGHTMESSAGE = __T("Copyright 2008-2011 NetAllied Systems GmbH.");
 	const TCHAR* COLLADAPlugin::OTHERMESSAGE1 = __T("");

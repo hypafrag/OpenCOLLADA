@@ -2604,7 +2604,7 @@
       <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>maxutil.lib;core.lib;paramblk2.lib;geom.lib;bmm.lib;mesh.lib;mnmath.lib;poly.lib;gup.lib;menus.lib;morpher_2015_x64.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Maxscrpt.lib;maxutil.lib;core.lib;paramblk2.lib;geom.lib;bmm.lib;mesh.lib;mnmath.lib;poly.lib;gup.lib;menus.lib;morpher_2015_x64.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)New.dle</OutputFile>
       <Version>1.3</Version>
       <AdditionalLibraryDirectories>$(MAX_SDK_PATH2016)\lib\x64\Release;..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

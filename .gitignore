@@ -14,6 +14,7 @@ INSTALL.vcxproj*
 OpenCOLLADA.sln
 OpenCOLLADAConfig*.cmake
 CMakeCache.txt
+.COLLADAMaxVersionInfo.h
 
 .DS_Store
 *.xcodeproj
@@ -22,3 +23,4 @@ cmake_temp
 CMakeScripts/
 /bin/
 /lib/
+/cmake_temp_msvc2015/

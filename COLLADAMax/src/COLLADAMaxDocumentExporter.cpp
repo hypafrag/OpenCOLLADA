@@ -38,6 +38,8 @@
 #include "COLLADABUVersionInfo.h"
 
 #include <max.h>
+#include <maxscript/maxscript.h>
+#include <maxscript/util/listener.h>
 
 namespace COLLADAMax
 {
@@ -339,6 +341,8 @@ namespace COLLADAMax
 				Interval animRange = GetCOREInterface()->GetAnimRange();
 				int sceneStart = animRange.Start();
 				int sceneEnd = animRange.End();
+				the_listener->edit_stream->wprintf(L"setAnimBounds: %d %d", sceneStart, sceneEnd);
+				the_listener->edit_stream->flush();
 				mOptions.setAnimBounds(sceneStart, sceneEnd);
 			}
 		}

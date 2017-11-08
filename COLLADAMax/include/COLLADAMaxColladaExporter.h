@@ -102,7 +102,7 @@ namespace COLLADAMax
 
         const TCHAR * ClassName()
         {
-            return __T("OpenCOLLADAExporter");
+            return __T("OpenCOLLADAExporterEP");
         }
 
         SClass_ID SuperClassID()
@@ -122,7 +122,7 @@ namespace COLLADAMax
 
         const TCHAR* InternalName()
         {
-            return _T ( "OpenCOLLADAExporter" );
+            return _T ( "OpenCOLLADAExporterEP" );
         } // returns fixed parsable name (scripter-visible name)
 
         HINSTANCE HInstance()
